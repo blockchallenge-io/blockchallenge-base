@@ -1,9 +1,13 @@
 plugins {
     java
+    `maven-publish`
+    id("net.linguica.maven-settings") version "0.5"
 }
 
 group = "io.blockchallenge"
 version = "1.0"
+java.targetCompatibility = JavaVersion.VERSION_16
+java.sourceCompatibility = JavaVersion.VERSION_16
 
 repositories {
     mavenCentral()
@@ -15,4 +19,23 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "github"
+            setUrl("https://maven.pkg.github.com/blockchallenge-io/blockchallenge-base")
+        }
+    }
+
+    publications {
+        create<MavenPublication>("gpr") {
+            groupId = group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+
+            from(components["java"])
+        }
+    }
 }
